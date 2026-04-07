@@ -1,0 +1,10 @@
+^D:\CODE\CODEX\THREADPOOL\CMAKELISTS.TXT
+setlocal
+D:\Code_Software\Qt\Tools\CMake_64\bin\cmake.exe -SD:/code/Codex/ThreadPool -BD:/code/Codex/ThreadPool/build --check-stamp-file D:/code/Codex/ThreadPool/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
