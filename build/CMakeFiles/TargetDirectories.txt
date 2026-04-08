@@ -1,3 +1,0 @@
-D:/code/Codex/ThreadPool/build/CMakeFiles/ThreadPool.dir
-D:/code/Codex/ThreadPool/build/CMakeFiles/ALL_BUILD.dir
-D:/code/Codex/ThreadPool/build/CMakeFiles/ZERO_CHECK.dir
