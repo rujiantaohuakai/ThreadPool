@@ -75,3 +75,4 @@ cmake --build build --config Debug
 - 增加任务数量统计
 - 增加优先级任务支持
 - 增加动态扩缩容能力
+- 增加日志输出
