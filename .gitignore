@@ -43,6 +43,9 @@ Testing/
 *.tmp
 *.log
 
+# Local project notes
+CURRENT_STATUS_AND_PLAN.md
+
 # OS files
 .DS_Store
 Thumbs.db

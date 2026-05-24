@@ -2,7 +2,8 @@
 cmake_minimum_required(VERSION 3.10.0)
 
 # 项目名称与版本
-project(ThreadPool VERSION 1.0.0 LANGUAGES CXX)
+project(ThreadPool VERSION 2.1.0 LANGUAGES CXX)
+include(CMakePackageConfigHelpers)
 
 
 #[====[ 
@@ -26,9 +27,17 @@ add_library(ThreadPoolLib STATIC
     src/thread_pool.cpp
 )
 
+add_library(ThreadPool::ThreadPool ALIAS ThreadPoolLib)
+
+set_target_properties(ThreadPoolLib
+    PROPERTIES
+        EXPORT_NAME ThreadPool
+)
 
 target_include_directories(ThreadPoolLib
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
+    PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
 )
 
 target_compile_features(ThreadPoolLib
@@ -67,3 +76,40 @@ if(MSVC)
     target_compile_options(ThreadPoolTest PRIVATE /W4 /permissive- /utf-8)
     target_compile_definitions(ThreadPoolTest PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
+
+# 安装线程池库、头文件和 CMake 包配置，方便其他项目通过 find_package 使用。
+install(TARGETS ThreadPoolLib
+    EXPORT ThreadPoolTargets
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include
+)
+
+install(DIRECTORY include/
+    DESTINATION include
+)
+
+install(EXPORT ThreadPoolTargets
+    FILE ThreadPoolTargets.cmake
+    NAMESPACE ThreadPool::
+    DESTINATION lib/cmake/ThreadPool
+)
+
+configure_package_config_file(
+    cmake/ThreadPoolConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/ThreadPoolConfig.cmake
+    INSTALL_DESTINATION lib/cmake/ThreadPool
+)
+
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/ThreadPoolConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/ThreadPoolConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/ThreadPoolConfigVersion.cmake
+    DESTINATION lib/cmake/ThreadPool
+)
