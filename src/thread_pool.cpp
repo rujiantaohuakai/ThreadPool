@@ -12,6 +12,7 @@
 #include <filesystem>
 #include <chrono>
 #include <iomanip>
+#include <exception>
 
 ThreadPool::ThreadPool(std::size_t threadNums)
     : isstop(false),
@@ -86,8 +87,18 @@ void ThreadPool::worker(){
             oss << "worker " << std::this_thread::get_id() << " started a task.";
             log(oss.str());
         }
-        // 执行任务
-        task();
+        
+        try {
+            // 执行任务
+            task();
+        }
+        catch (const std::exception& ex) {
+            log(std::string("worker task wrapper threw: ") + ex.what());
+        }
+        catch (...) {
+            log("worker task wrapper threw an unknown exception.");
+        }
+        
 
         {
             std::unique_lock<std::mutex> lock(this->mtx);
